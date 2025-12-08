@@ -17,5 +17,12 @@
   "assets": {
     "directory": "./dist/client",
     "not_found_handling": "single-page-application"
-  }
+  },
+  "vpc_services": [
+    {
+      "binding": "MAC",
+      "service_id": "019afbe6-8167-7561-af5a-fd80ddb0ad54",
+      "remote": true
+    }
+  ]
 }
