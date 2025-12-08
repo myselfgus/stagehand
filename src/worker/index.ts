@@ -7,6 +7,25 @@ import { startScreencast } from "./screencast";
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
+    
+    // VPC endpoint - executa comandos no Mac via túnel direto
+    if (url.pathname === "/mac") {
+      if (request.method === "POST") {
+        const body = await request.json() as { command: string };
+        const response = await env.MAC.fetch("http://localhost/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ command: body.command })
+        });
+        return response;
+      }
+      // GET retorna status
+      const response = await env.MAC.fetch("http://localhost/", {
+        method: "GET"
+      });
+      return response;
+    }
+
     if (url.pathname !== "/movie")
       return new Response("Not found", { status: 404 });
 
@@ -76,3 +95,4 @@ export default {
     });
   },
 };
+
